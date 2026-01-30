@@ -320,7 +320,7 @@ export default function ChatComponent({
 
   return (
     <div
-      className={`flex flex-col md:items-center md:justify-center w-full h-[100dvh] md:h-screen font-sans overflow-hidden transition-colors duration-500 ${
+      className={`fixed inset-0 flex-col md:items-center md:justify-center w-full h-[100dvh] md:h-screen font-sans overflow-hidden transition-colors duration-500 ${
         isDarkMode
           ? "bg-slate-950 text-slate-100"
           : "bg-slate-50 text-slate-900"
@@ -336,7 +336,7 @@ export default function ChatComponent({
       <motion.div
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
-        className={`flex flex-col w-full flex-1 md:flex-none md:h-[85vh] md:max-w-[900px] relative md:rounded-[2rem] md:shadow-2xl overflow-hidden border transition-all duration-300 ${
+        className={`flex flex-col w-full h-full flex-1 md:flex-none md:h-[85vh] md:max-w-[900px] relative md:rounded-[2rem] md:shadow-2xl overflow-hidden border transition-all duration-300 ${
           isDarkMode
             ? "bg-slate-900/60 backdrop-blur-2xl border-white/10"
             : "bg-white/80 backdrop-blur-xl border-white/60 shadow-blue-200/20"
@@ -613,3 +613,4 @@ export default function ChatComponent({
     </div>
   );
 }
+
