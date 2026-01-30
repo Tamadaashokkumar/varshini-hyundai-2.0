@@ -320,7 +320,7 @@ export default function ChatComponent({
 
   return (
     <div
-      className={`flex flex-col items-center justify-center w-full h-[100dvh] md:h-screen font-sans overflow-hidden transition-colors duration-500 ${
+      className={`flex flex-col md:items-center md:justify-center w-full h-[100dvh] md:h-screen font-sans overflow-hidden transition-colors duration-500 ${
         isDarkMode
           ? "bg-slate-950 text-slate-100"
           : "bg-slate-50 text-slate-900"
@@ -499,7 +499,7 @@ export default function ChatComponent({
         </div>
 
         {/* --- INPUT AREA --- */}
-        <div className="p-4 md:p-6 pt-2 z-20 bg-transparent">
+        <div className="px-4 pb-2 pt-2 md:p-6 pt-2 z-20 bg-transparent">
           {/* File Preview */}
           <AnimatePresence>
             {selectedFile && (
