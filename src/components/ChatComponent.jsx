@@ -320,7 +320,10 @@ export default function ChatComponent({
 
   return (
     <div
-      className={`fixed inset-0 flex-col md:items-center md:justify-center w-full h-[100dvh] md:h-screen font-sans overflow-hidden transition-colors duration-500 ${
+      // --- FINAL FULL SCREEN FIX ---
+      // Mobile: 'fixed inset-0 z-50' -> Keyboard open ayina screen kadalakunda untundi.
+      // Desktop: 'md:h-screen' -> Navbar ledu kabatti, 100% screen height teesukuntundi (Gap raadu).
+      className={`fixed inset-0 z-50 md:static md:w-full md:h-screen md:flex md:items-center md:justify-center font-sans overflow-hidden transition-colors duration-500 ${
         isDarkMode
           ? "bg-slate-950 text-slate-100"
           : "bg-slate-50 text-slate-900"
@@ -336,7 +339,10 @@ export default function ChatComponent({
       <motion.div
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
-        className={`flex flex-col w-full h-full flex-1 md:flex-none md:h-[85vh] md:max-w-[900px] relative md:rounded-[2rem] md:shadow-2xl overflow-hidden border transition-all duration-300 ${
+        // --- CARD SIZE ---
+        // Desktop: 'md:h-[650px]' ani fixed height petta.
+        // Idi 100% screen lo center lo correct ga "App" laaga kanipistundi.
+        className={`flex flex-col w-full h-full md:flex-none md:w-[900px] md:h-[650px] relative md:rounded-[2rem] md:shadow-2xl overflow-hidden border transition-all duration-300 ${
           isDarkMode
             ? "bg-slate-900/60 backdrop-blur-2xl border-white/10"
             : "bg-white/80 backdrop-blur-xl border-white/60 shadow-blue-200/20"
@@ -446,7 +452,6 @@ export default function ChatComponent({
                           : "bg-white text-slate-800 border border-gray-100 rounded-bl-[4px]"
                     }`}
                   >
-                    {/* Media Content */}
                     {msg.fileUrl && (
                       <div className="mb-3 rounded-xl overflow-hidden bg-black/20">
                         {msg.messageType === "image" ? (
@@ -499,7 +504,7 @@ export default function ChatComponent({
         </div>
 
         {/* --- INPUT AREA --- */}
-        <div className="px-4 pb-2 pt-2 md:p-6 pt-2 z-20 bg-transparent">
+        <div className="px-4 pb-3 pt-2 md:p-6 z-20 bg-transparent">
           {/* File Preview */}
           <AnimatePresence>
             {selectedFile && (
@@ -507,7 +512,7 @@ export default function ChatComponent({
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: 10, opacity: 0 }}
-                className="absolute bottom-24 left-6 right-6 z-30"
+                className="absolute bottom-20 left-6 right-6 z-30"
               >
                 <div
                   className={`flex items-center gap-3 p-3 rounded-2xl shadow-xl border ${isDarkMode ? "bg-slate-800 border-white/10" : "bg-white border-gray-100"}`}
@@ -574,7 +579,7 @@ export default function ChatComponent({
               className={`flex-1 bg-transparent border-none outline-none text-[15px] px-2 ${isDarkMode ? "text-white placeholder:text-slate-500" : "text-slate-900 placeholder:text-slate-400"}`}
             />
 
-            {/* Action Button (Send / Record) */}
+            {/* Action Button */}
             {inputText.trim() || selectedFile ? (
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -613,4 +618,3 @@ export default function ChatComponent({
     </div>
   );
 }
-
