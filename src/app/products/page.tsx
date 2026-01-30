@@ -81,36 +81,37 @@
 //   }, [fetchProducts]);
 
 //   return (
-//     <div className="min-h-screen bg-gray-50 dark:bg-[#050505] text-gray-900 dark:text-white transition-colors duration-300">
-//       {/* 🌌 Background Glows (Visible mostly in Dark) */}
+//     // Changed main bg to a rich dark gradient to make Glassmorphism pop
+//     <div className="p-24 min-h-screen bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#050505] dark:to-[#1a1a2e] text-gray-900 dark:text-white transition-colors duration-300 font-sans">
+//       {/* 🌌 Background Glows - Enhanced for Glass Effect */}
 //       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-//         <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-blue-500/5 dark:bg-blue-600/10 rounded-full blur-[120px]"></div>
-//         <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-500/5 dark:bg-purple-600/10 rounded-full blur-[120px]"></div>
+//         <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-blue-500/20 rounded-full blur-[150px]"></div>
+//         <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-purple-500/20 rounded-full blur-[150px]"></div>
 //       </div>
 
-//       {/* ================= HEADER SECTION ================= */}
-//       <div className="relative z-20 sticky top-0 bg-white/80 dark:bg-[#050505]/80 backdrop-blur-xl border-b border-gray-200 dark:border-white/5 transition-colors duration-300">
+//       {/* ================= HEADER SECTION (Glass) ================= */}
+//       <div className="relative z-20 sticky top-0 bg-white/60 dark:bg-black/60 backdrop-blur-xl border-b border-white/20 dark:border-white/10 transition-colors duration-300 shadow-sm">
 //         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 //           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
 //             <div>
-//               <h1 className="text-3xl font-bold text-gray-900 dark:text-white bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
+//               <h1 className="text-3xl font-bold text-gray-900 dark:text-white drop-shadow-sm">
 //                 Explore Spares
 //               </h1>
-//               <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
+//               <p className="text-gray-600 dark:text-gray-300 text-sm mt-1 font-medium">
 //                 Genuine parts for your Hyundai machine.
 //               </p>
 //             </div>
 
-//             {/* Search Bar */}
+//             {/* Search Bar (Glass Style) */}
 //             <div className="relative w-full md:w-96 group">
 //               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-//                 <Search className="h-5 w-5 text-gray-400 group-focus-within:text-cyan-600 dark:group-focus-within:text-cyan-400 transition-colors" />
+//                 <Search className="h-5 w-5 text-gray-500 dark:text-gray-400 group-focus-within:text-cyan-600 dark:group-focus-within:text-cyan-400 transition-colors" />
 //               </div>
 //               <input
 //                 type="text"
 //                 value={search}
 //                 onChange={(e) => setSearch(e.target.value)}
-//                 className="block w-full pl-10 pr-3 py-3 border border-gray-200 dark:border-white/10 rounded-xl leading-5 bg-gray-100 dark:bg-white/5 text-gray-900 dark:text-gray-300 placeholder-gray-500 focus:outline-none focus:bg-white dark:focus:bg-white/10 focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 sm:text-sm transition-all shadow-sm dark:shadow-none"
+//                 className="block w-full pl-10 pr-3 py-3 border border-white/20 dark:border-white/10 rounded-xl leading-5 bg-white/40 dark:bg-white/5 backdrop-blur-md text-gray-900 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:bg-white/60 dark:focus:bg-white/10 focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 sm:text-sm transition-all shadow-inner"
 //                 placeholder="Search by part name or number..."
 //               />
 //             </div>
@@ -118,7 +119,7 @@
 //             {/* Mobile Filter Toggle */}
 //             <button
 //               onClick={() => setIsMobileFilterOpen(true)}
-//               className="md:hidden flex items-center justify-center gap-2 w-full py-3 bg-white dark:bg-white/10 rounded-xl border border-gray-200 dark:border-white/10 text-sm font-medium shadow-sm"
+//               className="md:hidden flex items-center justify-center gap-2 w-full py-3 bg-white/40 dark:bg-white/10 backdrop-blur-md rounded-xl border border-white/20 text-sm font-medium shadow-sm"
 //             >
 //               <Filter size={18} /> Filters & Sort
 //             </button>
@@ -128,8 +129,8 @@
 
 //       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
 //         <div className="flex flex-col lg:flex-row gap-8">
-//           {/* ================= SIDEBAR FILTERS (DESKTOP) ================= */}
-//           <aside className="hidden lg:block w-64 flex-shrink-0 space-y-8 sticky top-32 h-fit">
+//           {/* ================= SIDEBAR FILTERS (Glass Panel) ================= */}
+//           <aside className="hidden lg:block w-64 flex-shrink-0 space-y-8 sticky top-32 h-fit p-6 rounded-2xl bg-white/40 dark:bg-black/20 backdrop-blur-xl border border-white/30 dark:border-white/10 shadow-xl">
 //             {/* Categories */}
 //             <div>
 //               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
@@ -144,8 +145,8 @@
 //                   onClick={() => setSelectedCategory("All")}
 //                   className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all font-medium ${
 //                     selectedCategory === "All"
-//                       ? "bg-cyan-50 text-cyan-700 border border-cyan-200 dark:bg-cyan-500/10 dark:text-cyan-400 dark:border-cyan-500/20"
-//                       : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white"
+//                       ? "bg-cyan-500/20 text-cyan-800 dark:text-cyan-300 border border-cyan-500/30 shadow-inner"
+//                       : "text-gray-700 dark:text-gray-300 hover:bg-white/30 dark:hover:bg-white/10"
 //                   }`}
 //                 >
 //                   All Parts
@@ -156,8 +157,8 @@
 //                     onClick={() => setSelectedCategory(cat)}
 //                     className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all font-medium ${
 //                       selectedCategory === cat
-//                         ? "bg-cyan-50 text-cyan-700 border border-cyan-200 dark:bg-cyan-500/10 dark:text-cyan-400 dark:border-cyan-500/20"
-//                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white"
+//                         ? "bg-cyan-500/20 text-cyan-800 dark:text-cyan-300 border border-cyan-500/30 shadow-inner"
+//                         : "text-gray-700 dark:text-gray-300 hover:bg-white/30 dark:hover:bg-white/10"
 //                     }`}
 //                   >
 //                     {cat}
@@ -183,9 +184,9 @@
 //                   step="500"
 //                   value={priceRange[1]}
 //                   onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
-//                   className="w-full h-1 bg-gray-300 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-cyan-600 dark:accent-cyan-500"
+//                   className="w-full h-1.5 bg-gray-200/50 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-cyan-600 dark:accent-cyan-400"
 //                 />
-//                 <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2 font-medium">
+//                 <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 mt-2 font-medium">
 //                   <span>₹0</span>
 //                   <span className="text-gray-900 dark:text-white">
 //                     Up to ₹{priceRange[1].toLocaleString()}
@@ -203,7 +204,7 @@
 //                 <select
 //                   value={sortBy}
 //                   onChange={(e) => setSortBy(e.target.value)}
-//                   className="w-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:border-cyan-500/50 appearance-none cursor-pointer shadow-sm"
+//                   className="w-full bg-white/50 dark:bg-black/40 border border-white/30 dark:border-white/10 rounded-lg px-4 py-2.5 text-sm text-gray-800 dark:text-gray-200 focus:outline-none focus:border-cyan-500/50 appearance-none cursor-pointer shadow-sm backdrop-blur-md"
 //                 >
 //                   {SORT_OPTIONS.map((opt) => (
 //                     <option
@@ -215,7 +216,7 @@
 //                     </option>
 //                   ))}
 //                 </select>
-//                 <ChevronDown className="absolute right-3 top-3 h-4 w-4 text-gray-400 pointer-events-none" />
+//                 <ChevronDown className="absolute right-3 top-3 h-4 w-4 text-gray-500 pointer-events-none" />
 //               </div>
 //             </div>
 //           </aside>
@@ -226,7 +227,7 @@
 //             {(selectedCategory !== "All" || search) && (
 //               <div className="mb-6 flex flex-wrap gap-2">
 //                 {selectedCategory !== "All" && (
-//                   <span className="px-3 py-1 bg-cyan-100 dark:bg-cyan-500/10 border border-cyan-200 dark:border-cyan-500/20 rounded-full text-xs text-cyan-700 dark:text-cyan-400 flex items-center gap-1 font-medium">
+//                   <span className="px-3 py-1 bg-cyan-100/50 dark:bg-cyan-500/20 backdrop-blur-sm border border-cyan-200/50 dark:border-cyan-500/30 rounded-full text-xs text-cyan-800 dark:text-cyan-300 flex items-center gap-1 font-medium shadow-sm">
 //                     Category: {selectedCategory}
 //                     <button onClick={() => setSelectedCategory("All")}>
 //                       <X size={12} />
@@ -234,7 +235,7 @@
 //                   </span>
 //                 )}
 //                 {search && (
-//                   <span className="px-3 py-1 bg-purple-100 dark:bg-purple-500/10 border border-purple-200 dark:border-purple-500/20 rounded-full text-xs text-purple-700 dark:text-purple-400 flex items-center gap-1 font-medium">
+//                   <span className="px-3 py-1 bg-purple-100/50 dark:bg-purple-500/20 backdrop-blur-sm border border-purple-200/50 dark:border-purple-500/30 rounded-full text-xs text-purple-800 dark:text-purple-300 flex items-center gap-1 font-medium shadow-sm">
 //                     Search: "{search}"
 //                     <button onClick={() => setSearch("")}>
 //                       <X size={12} />
@@ -246,7 +247,7 @@
 //                     setSelectedCategory("All");
 //                     setSearch("");
 //                   }}
-//                   className="text-xs text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white underline ml-2"
+//                   className="text-xs text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white underline ml-2"
 //                 >
 //                   Clear All
 //                 </button>
@@ -258,22 +259,22 @@
 //                 {[1, 2, 3, 4, 5, 6].map((i) => (
 //                   <div
 //                     key={i}
-//                     className="bg-white dark:bg-white/5 rounded-[1.5rem] h-96 animate-pulse border border-gray-100 dark:border-white/5 shadow-sm"
+//                     className="bg-white/20 dark:bg-white/5 rounded-[1.5rem] h-96 animate-pulse border border-white/30 dark:border-white/5 shadow-sm"
 //                   ></div>
 //                 ))}
 //               </div>
 //             ) : products.length === 0 ? (
 //               <div className="flex flex-col items-center justify-center py-20 text-center">
-//                 <div className="bg-gray-100 dark:bg-white/5 p-6 rounded-full mb-4">
+//                 <div className="bg-white/30 dark:bg-white/5 p-6 rounded-full mb-4 backdrop-blur-sm">
 //                   <Package
 //                     size={64}
-//                     className="text-gray-400 dark:text-gray-600"
+//                     className="text-gray-400 dark:text-gray-500"
 //                   />
 //                 </div>
 //                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">
 //                   No Products Found
 //                 </h3>
-//                 <p className="text-gray-500 dark:text-gray-500 mt-2 max-w-md">
+//                 <p className="text-gray-600 dark:text-gray-400 mt-2 max-w-md">
 //                   We couldn't find any parts matching your filters. Try
 //                   adjusting your search or category.
 //                 </p>
@@ -282,7 +283,7 @@
 //                     setSelectedCategory("All");
 //                     setSearch("");
 //                   }}
-//                   className="mt-6 px-6 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-500 transition-colors shadow-lg shadow-cyan-500/20"
+//                   className="mt-6 px-6 py-2 bg-cyan-600/90 hover:bg-cyan-500 text-white rounded-lg transition-all shadow-lg shadow-cyan-500/30 backdrop-blur-sm"
 //                 >
 //                   Clear Filters
 //                 </button>
@@ -314,7 +315,7 @@
 //               animate={{ x: 0 }}
 //               exit={{ x: "100%" }}
 //               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-//               className="fixed inset-y-0 right-0 w-80 bg-white dark:bg-[#0f111a] border-l border-gray-200 dark:border-white/10 z-50 p-6 overflow-y-auto lg:hidden shadow-2xl"
+//               className="fixed inset-y-0 right-0 w-80 bg-white/80 dark:bg-[#0f111a]/90 backdrop-blur-2xl border-l border-white/20 dark:border-white/10 z-50 p-6 overflow-y-auto lg:hidden shadow-2xl"
 //             >
 //               <div className="flex items-center justify-between mb-8">
 //                 <h2 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -322,15 +323,14 @@
 //                 </h2>
 //                 <button
 //                   onClick={() => setIsMobileFilterOpen(false)}
-//                   className="p-2 bg-gray-100 dark:bg-white/5 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+//                   className="p-2 bg-gray-100/50 dark:bg-white/5 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
 //                 >
 //                   <X size={20} />
 //                 </button>
 //               </div>
 
-//               {/* Mobile content uses same styling logic as Sidebar... just adapt colors */}
 //               <div className="space-y-8">
-//                 {/* ... Mobile filter content (Keeping it brief, use same classes as Desktop) ... */}
+//                 {/* Mobile Sort */}
 //                 <div>
 //                   <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
 //                     Sort By
@@ -338,7 +338,7 @@
 //                   <select
 //                     value={sortBy}
 //                     onChange={(e) => setSortBy(e.target.value)}
-//                     className="w-full bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg px-4 py-3 text-sm text-gray-900 dark:text-white outline-none"
+//                     className="w-full bg-gray-100/50 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-lg px-4 py-3 text-sm text-gray-900 dark:text-white outline-none"
 //                   >
 //                     {SORT_OPTIONS.map((opt) => (
 //                       <option
@@ -351,6 +351,7 @@
 //                     ))}
 //                   </select>
 //                 </div>
+//                 {/* Mobile Categories */}
 //                 <div>
 //                   <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
 //                     Categories
@@ -359,7 +360,7 @@
 //                     {CATEGORIES.map((cat) => (
 //                       <label
 //                         key={cat}
-//                         className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-white/5 rounded-lg cursor-pointer border border-gray-100 dark:border-transparent"
+//                         className="flex items-center gap-3 p-3 bg-gray-50/50 dark:bg-white/5 rounded-lg cursor-pointer border border-gray-100/50 dark:border-transparent"
 //                       >
 //                         <input
 //                           type="radio"
@@ -396,7 +397,7 @@
 //   );
 // }
 
-// // ================= PRODUCT CARD COMPONENT =================
+// // ================= PRODUCT CARD COMPONENT (GLASS & NO PADDING) =================
 // function ProductCard({ product }: { product: Product }) {
 //   const price = product.price;
 //   const discountPrice = product.discountPrice || 0;
@@ -413,51 +414,57 @@
 //       className="group h-full"
 //     >
 //       <Link href={`/products/${product._id}`} className="block h-full">
-//         {/* Card Container:
-//            Light Mode: White bg, subtle border, soft shadow
-//            Dark Mode: Smoked bg, subtle light border, glow on hover
+//         {/* GLASSMORPHISM CARD STYLES:
+//            1. bg-white/20 dark:bg-white/5 -> Translucent background
+//            2. backdrop-blur-xl -> The blur effect
+//            3. border-white/30 -> Subtle frosty border
 //         */}
-//         <div className="h-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-[1.5rem] overflow-hidden hover:border-cyan-500/50 hover:shadow-xl hover:shadow-cyan-500/10 dark:hover:shadow-cyan-500/10 transition-all duration-300 flex flex-col relative">
-//           {/* Image Area - FIXED for Vertical/Horizontal */}
-//           <div className="relative aspect-square p-6 bg-gray-50 dark:bg-[#121212] overflow-hidden flex items-center justify-center border-b border-gray-100 dark:border-white/5">
-//             {/* Hover Glow Effect */}
-//             <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+//         <div className="h-full bg-white/20 dark:bg-black/20 backdrop-blur-xl border border-white/30 dark:border-white/10 rounded-[1.5rem] overflow-hidden hover:border-cyan-500/50 hover:shadow-2xl hover:shadow-cyan-500/20 transition-all duration-300 flex flex-col relative">
+//           {/* IMAGE AREA - NO PADDING
+//               Removed p-6, removed p-4 on Image.
+//               Added w-full h-full object-cover so it sticks to edges.
+//           */}
+//           <div className="relative aspect-square w-full bg-gradient-to-b from-white/10 to-transparent dark:from-white/5 dark:to-transparent overflow-hidden flex items-center justify-center border-b border-white/10">
+//             {/* Hover Glow Effect inside image area */}
+//             <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
 
 //             {product.images?.[0] ? (
 //               <Image
 //                 src={product.images[0].url}
 //                 alt={product.name}
 //                 fill
-//                 // object-contain ensures the image fits perfectly without cropping, regardless of orientation
-//                 className="object-contain p-4 group-hover:scale-110 transition-transform duration-500 ease-out z-10"
+//                 // object-cover makes it fill completely (athukuni untundi), object-contain keeps aspect ratio.
+//                 // Using object-contain combined with NO padding to ensure it reaches edges if possible without cropping awkwardly.
+//                 // If you want it STRICTLY sticking to all 4 corners and cropping is okay, change to 'object-cover'.
+//                 className="object-contain w-full h-full group-hover:scale-110 transition-transform duration-500 ease-out z-0"
 //               />
 //             ) : (
-//               <Package size={48} className="text-gray-300 dark:text-gray-600" />
+//               <Package size={48} className="text-gray-400/50" />
 //             )}
 
 //             {discount > 0 && (
-//               <span className="absolute top-4 left-4 bg-red-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-md z-20">
+//               <span className="absolute top-4 left-4 bg-red-500/90 backdrop-blur-sm text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-lg z-20 border border-red-400/20">
 //                 -{discount}%
 //               </span>
 //             )}
 
 //             {/* Quick View Button */}
 //             <div className="absolute bottom-4 right-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 z-20">
-//               <div className="bg-white dark:bg-black/80 backdrop-blur-md text-cyan-600 dark:text-cyan-400 p-3 rounded-full shadow-lg border border-gray-100 dark:border-white/10 hover:bg-cyan-500 hover:text-white hover:border-cyan-500 transition-colors">
+//               <div className="bg-white/80 dark:bg-black/80 backdrop-blur-md text-cyan-600 dark:text-cyan-400 p-3 rounded-full shadow-lg border border-white/20 hover:bg-cyan-500 hover:text-white hover:border-cyan-500 transition-colors">
 //                 <ArrowRight size={18} />
 //               </div>
 //             </div>
 //           </div>
 
-//           {/* Details */}
-//           <div className="p-5 flex-1 flex flex-col bg-white dark:bg-transparent">
+//           {/* Details Section */}
+//           <div className="p-5 flex-1 flex flex-col bg-transparent">
 //             <div className="mb-2">
-//               <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-700 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-900/20 px-2 py-1 rounded border border-cyan-100 dark:border-transparent">
+//               <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-800 dark:text-cyan-300 bg-cyan-100/50 dark:bg-cyan-500/20 px-2 py-1 rounded border border-cyan-200/50 dark:border-cyan-500/30">
 //                 {product.category}
 //               </span>
 //             </div>
 
-//             <h3 className="font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 leading-tight group-hover:text-cyan-600 dark:group-hover:text-cyan-500 transition-colors">
+//             <h3 className="font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 leading-tight group-hover:text-cyan-700 dark:group-hover:text-cyan-400 transition-colors drop-shadow-sm">
 //               {product.name}
 //             </h3>
 
@@ -467,21 +474,23 @@
 //               <span className="text-xs font-bold text-gray-700 dark:text-gray-300">
 //                 {product.averageRating || 4.5}
 //               </span>
-//               <span className="text-xs text-gray-400">(24 reviews)</span>
+//               <span className="text-xs text-gray-500 dark:text-gray-400">
+//                 (24 reviews)
+//               </span>
 //             </div>
 
-//             <div className="mt-auto pt-3 border-t border-dashed border-gray-200 dark:border-white/10 flex items-center justify-between">
+//             <div className="mt-auto pt-3 border-t border-dashed border-gray-300/50 dark:border-white/10 flex items-center justify-between">
 //               <div className="flex flex-col">
 //                 <span className="text-lg font-bold text-gray-900 dark:text-white">
 //                   ₹{finalPrice.toLocaleString()}
 //                 </span>
 //                 {discount > 0 && (
-//                   <span className="text-xs text-gray-400 line-through">
+//                   <span className="text-xs text-gray-500 dark:text-gray-400 line-through">
 //                     ₹{product.price.toLocaleString()}
 //                   </span>
 //                 )}
 //               </div>
-//               <div className="w-9 h-9 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center text-gray-500 dark:text-gray-400 group-hover:bg-cyan-600 group-hover:text-white transition-all duration-300 shadow-sm">
+//               <div className="w-9 h-9 rounded-full bg-white/40 dark:bg-white/5 flex items-center justify-center text-gray-600 dark:text-gray-400 group-hover:bg-cyan-600 group-hover:text-white transition-all duration-300 shadow-sm backdrop-blur-sm border border-white/20">
 //                 <ShoppingCart size={16} />
 //               </div>
 //             </div>
@@ -508,6 +517,9 @@ import {
   Star,
   ArrowRight,
   Package,
+  Car, // Added Car Icon
+  CheckCircle2, // Added Success Icon
+  AlertCircle, // Added Warning Icon
 } from "lucide-react";
 import apiClient from "@/services/apiClient";
 
@@ -521,6 +533,17 @@ interface Product {
   category: string;
   stock: number;
   averageRating?: number;
+  // Added compatibleModels to type
+  compatibleModels?: {
+    modelName: string;
+    yearFrom: number;
+    yearTo?: number;
+  }[];
+}
+
+interface GarageCar {
+  model: string;
+  year: number;
 }
 
 const CATEGORIES = [
@@ -538,6 +561,25 @@ const SORT_OPTIONS = [
   { label: "Top Rated", value: "rating" },
 ];
 
+// --- Helper: Compatibility Logic ---
+const checkCompatibility = (product: Product, userCar: GarageCar | null) => {
+  if (
+    !userCar ||
+    !product.compatibleModels ||
+    product.compatibleModels.length === 0
+  )
+    return null;
+
+  return product.compatibleModels.some((item) => {
+    const modelMatch = item.modelName
+      .toLowerCase()
+      .includes(userCar.model.toLowerCase());
+    const endYear = item.yearTo || new Date().getFullYear();
+    const yearMatch = userCar.year >= item.yearFrom && userCar.year <= endYear;
+    return modelMatch && yearMatch;
+  });
+};
+
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -546,6 +588,33 @@ export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [priceRange, setPriceRange] = useState([0, 50000]);
   const [sortBy, setSortBy] = useState("newest");
+
+  // --- MY GARAGE STATE ---
+  const [userGarage, setUserGarage] = useState<GarageCar | null>(null);
+  const [garageForm, setGarageForm] = useState({
+    model: "Creta",
+    year: "2020",
+  }); // Default values for ease
+
+  // Load Garage from Local Storage on Mount
+  useEffect(() => {
+    const savedGarage = localStorage.getItem("myGarage");
+    if (savedGarage) {
+      setUserGarage(JSON.parse(savedGarage));
+    }
+  }, []);
+
+  const saveToGarage = () => {
+    if (!garageForm.model || !garageForm.year) return;
+    const car = { model: garageForm.model, year: parseInt(garageForm.year) };
+    localStorage.setItem("myGarage", JSON.stringify(car));
+    setUserGarage(car);
+  };
+
+  const clearGarage = () => {
+    localStorage.removeItem("myGarage");
+    setUserGarage(null);
+  };
 
   const fetchProducts = useCallback(async () => {
     setLoading(true);
@@ -558,6 +627,12 @@ export default function ProductsPage() {
       params.append("maxPrice", priceRange[1].toString());
       params.append("sort", sortBy);
 
+      // --- Send Garage Info to Backend for Smart Filtering ---
+      if (userGarage) {
+        params.append("model", userGarage.model);
+        params.append("year", userGarage.year.toString());
+      }
+
       const response = await apiClient.get(`/products?${params.toString()}`);
       if (response.data.success) {
         setProducts(response.data.data.products || response.data.data);
@@ -567,7 +642,7 @@ export default function ProductsPage() {
     } finally {
       setLoading(false);
     }
-  }, [search, selectedCategory, priceRange, sortBy]);
+  }, [search, selectedCategory, priceRange, sortBy, userGarage]); // Added userGarage dependency
 
   useEffect(() => {
     const timer = setTimeout(() => fetchProducts(), 500);
@@ -575,15 +650,13 @@ export default function ProductsPage() {
   }, [fetchProducts]);
 
   return (
-    // Changed main bg to a rich dark gradient to make Glassmorphism pop
     <div className="p-24 min-h-screen bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#050505] dark:to-[#1a1a2e] text-gray-900 dark:text-white transition-colors duration-300 font-sans">
-      {/* 🌌 Background Glows - Enhanced for Glass Effect */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-blue-500/20 rounded-full blur-[150px]"></div>
         <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-purple-500/20 rounded-full blur-[150px]"></div>
       </div>
 
-      {/* ================= HEADER SECTION (Glass) ================= */}
+      {/* ================= HEADER SECTION ================= */}
       <div className="relative z-20 sticky top-0 bg-white/60 dark:bg-black/60 backdrop-blur-xl border-b border-white/20 dark:border-white/10 transition-colors duration-300 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -596,7 +669,6 @@ export default function ProductsPage() {
               </p>
             </div>
 
-            {/* Search Bar (Glass Style) */}
             <div className="relative w-full md:w-96 group">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Search className="h-5 w-5 text-gray-500 dark:text-gray-400 group-focus-within:text-cyan-600 dark:group-focus-within:text-cyan-400 transition-colors" />
@@ -610,7 +682,6 @@ export default function ProductsPage() {
               />
             </div>
 
-            {/* Mobile Filter Toggle */}
             <button
               onClick={() => setIsMobileFilterOpen(true)}
               className="md:hidden flex items-center justify-center gap-2 w-full py-3 bg-white/40 dark:bg-white/10 backdrop-blur-md rounded-xl border border-white/20 text-sm font-medium shadow-sm"
@@ -623,15 +694,82 @@ export default function ProductsPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* ================= SIDEBAR FILTERS (Glass Panel) ================= */}
+          {/* ================= SIDEBAR FILTERS ================= */}
           <aside className="hidden lg:block w-64 flex-shrink-0 space-y-8 sticky top-32 h-fit p-6 rounded-2xl bg-white/40 dark:bg-black/20 backdrop-blur-xl border border-white/30 dark:border-white/10 shadow-xl">
+            {/* --- 🚗 MY GARAGE WIDGET --- */}
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                <Car size={18} className="text-cyan-600 dark:text-cyan-400" />
+                My Garage
+              </h3>
+
+              {userGarage ? (
+                <div className="bg-cyan-500/10 dark:bg-cyan-500/20 border border-cyan-500/30 rounded-xl p-4">
+                  <p className="text-xs text-cyan-800 dark:text-cyan-300 font-bold uppercase tracking-wider mb-1">
+                    Vehicle Selected
+                  </p>
+                  <p className="text-lg font-bold text-gray-900 dark:text-white">
+                    Hyundai {userGarage.model}
+                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+                    Year: {userGarage.year}
+                  </p>
+                  <button
+                    onClick={clearGarage}
+                    className="w-full py-1.5 text-xs font-medium text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 border border-red-200 dark:border-red-500/30 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                  >
+                    Change Car
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <div className="space-y-1">
+                    <label className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                      Model
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Creta"
+                      value={garageForm.model}
+                      onChange={(e) =>
+                        setGarageForm({ ...garageForm, model: e.target.value })
+                      }
+                      className="w-full bg-white/50 dark:bg-black/40 border border-white/30 dark:border-white/10 rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 focus:outline-none focus:border-cyan-500/50"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                      Year
+                    </label>
+                    <input
+                      type="number"
+                      placeholder="e.g. 2020"
+                      value={garageForm.year}
+                      onChange={(e) =>
+                        setGarageForm({ ...garageForm, year: e.target.value })
+                      }
+                      className="w-full bg-white/50 dark:bg-black/40 border border-white/30 dark:border-white/10 rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 focus:outline-none focus:border-cyan-500/50"
+                    />
+                  </div>
+                  <button
+                    onClick={saveToGarage}
+                    className="w-full py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg text-sm font-medium shadow-lg shadow-cyan-500/20 transition-all"
+                  >
+                    Set Garage
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-700 to-transparent my-4"></div>
+
             {/* Categories */}
             <div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                 <Package
                   size={18}
                   className="text-cyan-600 dark:text-cyan-400"
-                />{" "}
+                />
                 Categories
               </h3>
               <div className="space-y-2">
@@ -718,8 +856,18 @@ export default function ProductsPage() {
           {/* ================= PRODUCT GRID ================= */}
           <div className="flex-1">
             {/* Active Filters Bar */}
-            {(selectedCategory !== "All" || search) && (
+            {(selectedCategory !== "All" || search || userGarage) && (
               <div className="mb-6 flex flex-wrap gap-2">
+                {/* My Garage Tag */}
+                {userGarage && (
+                  <span className="px-3 py-1 bg-green-100/50 dark:bg-green-500/20 backdrop-blur-sm border border-green-200/50 dark:border-green-500/30 rounded-full text-xs text-green-800 dark:text-green-300 flex items-center gap-1 font-medium shadow-sm">
+                    <Car size={12} /> {userGarage.model} ({userGarage.year})
+                    <button onClick={clearGarage}>
+                      <X size={12} />
+                    </button>
+                  </span>
+                )}
+
                 {selectedCategory !== "All" && (
                   <span className="px-3 py-1 bg-cyan-100/50 dark:bg-cyan-500/20 backdrop-blur-sm border border-cyan-200/50 dark:border-cyan-500/30 rounded-full text-xs text-cyan-800 dark:text-cyan-300 flex items-center gap-1 font-medium shadow-sm">
                     Category: {selectedCategory}
@@ -728,6 +876,7 @@ export default function ProductsPage() {
                     </button>
                   </span>
                 )}
+
                 {search && (
                   <span className="px-3 py-1 bg-purple-100/50 dark:bg-purple-500/20 backdrop-blur-sm border border-purple-200/50 dark:border-purple-500/30 rounded-full text-xs text-purple-800 dark:text-purple-300 flex items-center gap-1 font-medium shadow-sm">
                     Search: "{search}"
@@ -736,10 +885,12 @@ export default function ProductsPage() {
                     </button>
                   </span>
                 )}
+
                 <button
                   onClick={() => {
                     setSelectedCategory("All");
                     setSearch("");
+                    clearGarage();
                   }}
                   className="text-xs text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white underline ml-2"
                 >
@@ -769,23 +920,28 @@ export default function ProductsPage() {
                   No Products Found
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 mt-2 max-w-md">
-                  We couldn't find any parts matching your filters. Try
-                  adjusting your search or category.
+                  We couldn't find any parts matching your filters or garage
+                  vehicle.
                 </p>
                 <button
                   onClick={() => {
                     setSelectedCategory("All");
                     setSearch("");
+                    clearGarage(); // Clear garage to show all products
                   }}
                   className="mt-6 px-6 py-2 bg-cyan-600/90 hover:bg-cyan-500 text-white rounded-lg transition-all shadow-lg shadow-cyan-500/30 backdrop-blur-sm"
                 >
-                  Clear Filters
+                  Clear Filters & Garage
                 </button>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {products.map((product) => (
-                  <ProductCard key={product._id} product={product} />
+                  <ProductCard
+                    key={product._id}
+                    product={product}
+                    userGarage={userGarage}
+                  />
                 ))}
               </div>
             )}
@@ -891,13 +1047,24 @@ export default function ProductsPage() {
   );
 }
 
-// ================= PRODUCT CARD COMPONENT (GLASS & NO PADDING) =================
-function ProductCard({ product }: { product: Product }) {
+// ================= PRODUCT CARD COMPONENT =================
+function ProductCard({
+  product,
+  userGarage,
+}: {
+  product: Product;
+  userGarage: GarageCar | null;
+}) {
   const price = product.price;
   const discountPrice = product.discountPrice || 0;
   const finalPrice = discountPrice > 0 ? discountPrice : price;
   const discount =
     discountPrice > 0 ? Math.round(((price - discountPrice) / price) * 100) : 0;
+
+  // Calculate Fitment only if Garage is Active
+  const fitmentStatus = userGarage
+    ? checkCompatibility(product, userGarage)
+    : null;
 
   return (
     <motion.div
@@ -908,18 +1075,8 @@ function ProductCard({ product }: { product: Product }) {
       className="group h-full"
     >
       <Link href={`/products/${product._id}`} className="block h-full">
-        {/* GLASSMORPHISM CARD STYLES:
-           1. bg-white/20 dark:bg-white/5 -> Translucent background
-           2. backdrop-blur-xl -> The blur effect
-           3. border-white/30 -> Subtle frosty border
-        */}
         <div className="h-full bg-white/20 dark:bg-black/20 backdrop-blur-xl border border-white/30 dark:border-white/10 rounded-[1.5rem] overflow-hidden hover:border-cyan-500/50 hover:shadow-2xl hover:shadow-cyan-500/20 transition-all duration-300 flex flex-col relative">
-          {/* IMAGE AREA - NO PADDING 
-              Removed p-6, removed p-4 on Image.
-              Added w-full h-full object-cover so it sticks to edges.
-          */}
           <div className="relative aspect-square w-full bg-gradient-to-b from-white/10 to-transparent dark:from-white/5 dark:to-transparent overflow-hidden flex items-center justify-center border-b border-white/10">
-            {/* Hover Glow Effect inside image area */}
             <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
 
             {product.images?.[0] ? (
@@ -927,9 +1084,6 @@ function ProductCard({ product }: { product: Product }) {
                 src={product.images[0].url}
                 alt={product.name}
                 fill
-                // object-cover makes it fill completely (athukuni untundi), object-contain keeps aspect ratio.
-                // Using object-contain combined with NO padding to ensure it reaches edges if possible without cropping awkwardly.
-                // If you want it STRICTLY sticking to all 4 corners and cropping is okay, change to 'object-cover'.
                 className="object-contain w-full h-full group-hover:scale-110 transition-transform duration-500 ease-out z-0"
               />
             ) : (
@@ -942,7 +1096,26 @@ function ProductCard({ product }: { product: Product }) {
               </span>
             )}
 
-            {/* Quick View Button */}
+            {/* --- GARAGE FITMENT BADGE (TOP RIGHT) --- */}
+            {userGarage && fitmentStatus !== null && (
+              <div
+                className={`absolute top-4 right-4 z-20 px-2 py-1 rounded-lg backdrop-blur-md border shadow-lg flex items-center gap-1.5 ${
+                  fitmentStatus
+                    ? "bg-green-500/20 border-green-500/30 text-green-700 dark:text-green-300"
+                    : "bg-red-500/20 border-red-500/30 text-red-700 dark:text-red-300"
+                }`}
+              >
+                {fitmentStatus ? (
+                  <CheckCircle2 size={14} />
+                ) : (
+                  <AlertCircle size={14} />
+                )}
+                <span className="text-[10px] font-bold uppercase tracking-wide">
+                  {fitmentStatus ? "Fits" : "No Fit"}
+                </span>
+              </div>
+            )}
+
             <div className="absolute bottom-4 right-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 z-20">
               <div className="bg-white/80 dark:bg-black/80 backdrop-blur-md text-cyan-600 dark:text-cyan-400 p-3 rounded-full shadow-lg border border-white/20 hover:bg-cyan-500 hover:text-white hover:border-cyan-500 transition-colors">
                 <ArrowRight size={18} />
@@ -962,7 +1135,6 @@ function ProductCard({ product }: { product: Product }) {
               {product.name}
             </h3>
 
-            {/* Rating */}
             <div className="flex items-center gap-1 mb-3">
               <Star size={12} className="text-amber-400 fill-current" />
               <span className="text-xs font-bold text-gray-700 dark:text-gray-300">
@@ -972,6 +1144,13 @@ function ProductCard({ product }: { product: Product }) {
                 (24 reviews)
               </span>
             </div>
+
+            {/* If Garage Set but NOT Compatible, show textual warning */}
+            {userGarage && fitmentStatus === false && (
+              <div className="mb-3 text-[10px] text-red-600 dark:text-red-400 bg-red-100/50 dark:bg-red-900/20 p-2 rounded border border-red-200 dark:border-red-900/30">
+                ⚠️ Doesn't fit your {userGarage.model} ({userGarage.year})
+              </div>
+            )}
 
             <div className="mt-auto pt-3 border-t border-dashed border-gray-300/50 dark:border-white/10 flex items-center justify-between">
               <div className="flex flex-col">

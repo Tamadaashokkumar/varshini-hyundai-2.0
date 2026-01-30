@@ -407,6 +407,25 @@ import { useStore } from "@/store/useStore";
 import apiClient from "@/services/apiClient";
 import toast from "react-hot-toast";
 
+// --- HELPER: Compatibility Logic ---
+const checkCompatibility = (product: any, userCar: any) => {
+  if (
+    !userCar ||
+    !product.compatibleModels ||
+    product.compatibleModels.length === 0
+  )
+    return null;
+
+  return product.compatibleModels.some((item: any) => {
+    const modelMatch = item.modelName
+      .toLowerCase()
+      .includes(userCar.model.toLowerCase());
+    const endYear = item.yearTo || new Date().getFullYear();
+    const yearMatch = userCar.year >= item.yearFrom && userCar.year <= endYear;
+    return modelMatch && yearMatch;
+  });
+};
+
 // --- HELPER: Safe Image URL ---
 const getProductImage = (product: any) => {
   const image = product?.images?.[0]?.url;
@@ -422,6 +441,10 @@ export default function CartPage() {
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState<string | null>(null);
   const [couponCode, setCouponCode] = useState("");
+  const [userGarage, setUserGarage] = useState<{
+    model: string;
+    year: number;
+  } | null>(null);
 
   // ✅ NEW: Pincode States
   const [pincode, setPincode] = useState("");
@@ -452,6 +475,9 @@ export default function CartPage() {
       setPincode(savedPin);
       checkDelivery(savedPin);
     }
+    // Load Garage Data
+    const savedGarage = localStorage.getItem("myGarage");
+    if (savedGarage) setUserGarage(JSON.parse(savedGarage));
   }, []);
 
   const updateQuantity = async (
@@ -662,7 +688,9 @@ export default function CartPage() {
                 const originalPrice = item.product.price;
                 const sellingPrice = item.price;
                 const hasDiscount = originalPrice > sellingPrice;
-
+                const fitStatus = userGarage
+                  ? checkCompatibility(item.product, userGarage)
+                  : null;
                 return (
                   <motion.div
                     key={item._id}
@@ -698,6 +726,43 @@ export default function CartPage() {
                               <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 font-mono">
                                 Part #: {item.product?.partNumber}
                               </p>
+                              {/* 🔥 INSERT THIS BLOCK: Garage Fitment Check */}
+                              <div className="mt-2">
+                                {userGarage ? (
+                                  <div
+                                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold border ${
+                                      fitStatus
+                                        ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20"
+                                        : "bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-400 border-red-200 dark:border-red-500/20"
+                                    }`}
+                                  >
+                                    {fitStatus ? (
+                                      <>
+                                        <CheckCircle size={12} /> Fits your{" "}
+                                        {userGarage.model}
+                                      </>
+                                    ) : (
+                                      <>
+                                        <AlertCircle size={12} /> Doesn't fit{" "}
+                                        {userGarage.model}
+                                      </>
+                                    )}
+                                  </div>
+                                ) : (
+                                  // గ్యారేజ్ లేకపోతే సెట్ చేసుకోమని చిన్న లింక్
+                                  <button
+                                    onClick={() =>
+                                      alert(
+                                        "Please add your car in the Navbar or Home page!",
+                                      )
+                                    } // లేదా Modal ఓపెన్ చేసే లాజిక్
+                                    className="text-xs text-blue-600 dark:text-blue-400 flex items-center gap-1 hover:underline"
+                                  >
+                                    <AlertCircle size={12} /> Check
+                                    compatibility
+                                  </button>
+                                )}
+                              </div>
                             </div>
                             <button
                               onClick={() => removeItem(item._id)}

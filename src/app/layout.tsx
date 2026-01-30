@@ -1,5 +1,5 @@
 // src/app/layout.tsx
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { Orbitron } from "next/font/google";
 import "./globals.css";
@@ -17,6 +17,17 @@ const inter = Inter({
   variable: "--font-inter",
   display: "swap",
 });
+
+// --- IDI ADD CHEYANDI (THE FIX) ---
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false, // Optional: zoom disable chestundi (app-like feel kosam)
+  // Ee property keyboard open ayinappudu layout ni resize chestundi
+  interactiveWidget: "resizes-content",
+};
+// ----------------------------------
 
 const orbitron = Orbitron({
   subsets: ["latin"],
