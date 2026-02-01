@@ -24,6 +24,10 @@ import {
   Mic,
   StopCircle,
   FileAudio,
+  Edit2,
+  Trash2,
+  CornerUpLeft,
+  AlertTriangle, // 🔥 New Icon for Warning
 } from "lucide-react";
 
 // --- SOUND ASSETS ---
@@ -45,6 +49,15 @@ export default function ChatComponent({
   const [onlineStatus, setOnlineStatus] = useState("offline");
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploading, setUploading] = useState(false);
+
+  // --- FEATURES STATE ---
+  const [previewImage, setPreviewImage] = useState(null);
+  const [captionText, setCaptionText] = useState("");
+  const [editingMessageId, setEditingMessageId] = useState(null);
+  const [activeMenuId, setActiveMenuId] = useState(null);
+
+  // 🔥 NEW: Delete Confirmation State
+  const [deleteConfirmationId, setDeleteConfirmationId] = useState(null);
 
   // Voice Recording State
   const [isRecording, setIsRecording] = useState(false);
@@ -153,6 +166,25 @@ export default function ChatComponent({
       }
     });
 
+    // --- EVENTS ---
+    newSocket.on("message_updated", (updatedMsg) => {
+      if (updatedMsg.roomId === roomId) {
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg._id === updatedMsg._id
+              ? { ...msg, text: updatedMsg.text, isEdited: true }
+              : msg,
+          ),
+        );
+      }
+    });
+
+    newSocket.on("message_deleted", (data) => {
+      if (data.roomId === roomId) {
+        setMessages((prev) => prev.filter((msg) => msg._id !== data.messageId));
+      }
+    });
+
     newSocket.on("display_typing", (data) => {
       if (data.userId === otherUserId && data.roomId === roomId) {
         setOtherUserTyping(true);
@@ -181,6 +213,9 @@ export default function ChatComponent({
       newSocket.off("hide_typing");
       newSocket.off("user_status_update");
       newSocket.off("message_read");
+      newSocket.off("message_updated");
+      newSocket.off("message_deleted");
+
       newSocket.emit("leave_room", { roomId });
       newSocket.disconnect();
     };
@@ -230,15 +265,35 @@ export default function ChatComponent({
     }
   };
 
-  const sendMessage = async (fileData = null) => {
-    if (!fileData && !inputText.trim()) return;
+  const sendMessage = async (fileData = null, captionOverride = null) => {
+    const textToSend = captionOverride !== null ? captionOverride : inputText;
+
+    if (!fileData && !textToSend.trim()) return;
+
+    if (editingMessageId && !fileData) {
+      socket?.emit("edit_message", {
+        roomId,
+        messageId: editingMessageId,
+        newText: textToSend,
+      });
+      setMessages((prev) =>
+        prev.map((m) =>
+          m._id === editingMessageId
+            ? { ...m, text: textToSend, isEdited: true }
+            : m,
+        ),
+      );
+      setEditingMessageId(null);
+      setInputText("");
+      return;
+    }
 
     const msgType = fileData ? fileData.fileType : "text";
     const messagePayload = {
       roomId,
       receiverId: otherUserId,
       receiverModel: otherUserModel,
-      text: inputText || "",
+      text: textToSend || "",
       messageType: msgType,
       fileUrl: fileData ? fileData.fileUrl : null,
       fileName: fileData ? fileData.fileName : null,
@@ -248,9 +303,23 @@ export default function ChatComponent({
 
     socket?.emit("send_message", messagePayload);
     playSound("send");
-    setInputText("");
+
+    if (!fileData) setInputText("");
+    setPreviewImage(null);
+    setCaptionText("");
     setSelectedFile(null);
     socket?.emit("stop_typing", { roomId });
+  };
+
+  const handleFileSelect = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      if (file.type.startsWith("image/")) {
+        const url = URL.createObjectURL(file);
+        setPreviewImage(url);
+      }
+    }
   };
 
   const handleFileSend = async () => {
@@ -258,7 +327,45 @@ export default function ChatComponent({
     const fileData = await uploadFile(selectedFile);
     if (fileData) {
       if (selectedFile.type.startsWith("audio/")) fileData.fileType = "audio";
-      await sendMessage(fileData);
+      await sendMessage(fileData, captionText);
+    }
+  };
+
+  const cancelPreview = () => {
+    setSelectedFile(null);
+    setPreviewImage(null);
+    setCaptionText("");
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  // --- ACTIONS ---
+  const handleEditClick = (msg) => {
+    setInputText(msg.text);
+    setEditingMessageId(msg._id);
+    setActiveMenuId(null);
+    fileInputRef.current?.focus();
+  };
+
+  const handleCancelEdit = () => {
+    setEditingMessageId(null);
+    setInputText("");
+  };
+
+  // 🔥 UPDATED: Instead of window.confirm, just open the modal
+  const handleDeleteTrigger = (msgId) => {
+    setDeleteConfirmationId(msgId);
+    setActiveMenuId(null);
+  };
+
+  // 🔥 NEW: Actual Delete Action from Modal
+  const confirmDelete = () => {
+    if (deleteConfirmationId) {
+      socket?.emit("delete_message", {
+        roomId,
+        messageId: deleteConfirmationId,
+      });
+      setMessages((prev) => prev.filter((m) => m._id !== deleteConfirmationId));
+      setDeleteConfirmationId(null);
     }
   };
 
@@ -276,11 +383,9 @@ export default function ChatComponent({
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const recorder = new MediaRecorder(stream);
       let chunks = [];
-
       recorder.ondataavailable = (e) => {
         if (e.data.size > 0) chunks.push(e.data);
       };
-
       recorder.onstop = async () => {
         const audioBlob = new Blob(chunks, { type: "audio/webm" });
         const audioFile = new File([audioBlob], "voice_note.webm", {
@@ -292,7 +397,6 @@ export default function ChatComponent({
           sendMessage(fileData);
         }
       };
-
       recorder.start();
       setMediaRecorder(recorder);
       setIsRecording(true);
@@ -320,9 +424,6 @@ export default function ChatComponent({
 
   return (
     <div
-      // --- FINAL FULL SCREEN FIX ---
-      // Mobile: 'fixed inset-0 z-50' -> Keyboard open ayina screen kadalakunda untundi.
-      // Desktop: 'md:h-screen' -> Navbar ledu kabatti, 100% screen height teesukuntundi (Gap raadu).
       className={`fixed inset-0 z-50 md:static md:w-full md:h-screen md:flex md:items-center md:justify-center font-sans overflow-hidden transition-colors duration-500 ${
         isDarkMode
           ? "bg-slate-950 text-slate-100"
@@ -335,13 +436,122 @@ export default function ChatComponent({
         <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-indigo-500/10 rounded-full blur-[120px]"></div>
       </div>
 
+      {/* --- IMAGE PREVIEW MODAL --- */}
+      <AnimatePresence>
+        {previewImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+          >
+            <div
+              className={`w-full max-w-lg rounded-2xl overflow-hidden flex flex-col shadow-2xl ${isDarkMode ? "bg-slate-900" : "bg-white"}`}
+            >
+              <div className="p-4 flex justify-between items-center border-b border-gray-700/50">
+                <h3 className="font-semibold">Preview</h3>
+                <button
+                  onClick={cancelPreview}
+                  className="p-2 hover:bg-white/10 rounded-full"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+              <div className="flex-1 bg-black flex items-center justify-center p-2 min-h-[300px]">
+                <img
+                  src={previewImage}
+                  alt="Preview"
+                  className="max-h-[60vh] object-contain rounded-lg"
+                />
+              </div>
+              <div className="p-4 space-y-4">
+                <input
+                  type="text"
+                  placeholder="Add a caption..."
+                  value={captionText}
+                  onChange={(e) => setCaptionText(e.target.value)}
+                  className={`w-full p-3 rounded-xl outline-none border transition-all ${
+                    isDarkMode
+                      ? "bg-slate-800 border-slate-700 focus:border-blue-500 text-white"
+                      : "bg-gray-50 border-gray-200 focus:border-blue-500 text-slate-900"
+                  }`}
+                />
+                <div className="flex justify-end gap-3">
+                  <button
+                    onClick={handleFileSend}
+                    disabled={uploading}
+                    className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-medium transition-all"
+                  >
+                    {uploading ? (
+                      <Loader2 className="animate-spin" size={18} />
+                    ) : (
+                      <Send size={18} />
+                    )}
+                    {uploading ? "Sending..." : "Send"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* 🔥 NEW: DELETE CONFIRMATION MODAL 🔥 */}
+      <AnimatePresence>
+        {deleteConfirmationId && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className={`w-full max-w-sm p-6 rounded-3xl shadow-2xl border flex flex-col items-center text-center ${
+                isDarkMode
+                  ? "bg-slate-900 border-white/10"
+                  : "bg-white border-white/60"
+              }`}
+            >
+              <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 mb-4">
+                <Trash2 size={32} />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Delete Message?</h3>
+              <p
+                className={`text-sm mb-6 ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
+              >
+                Are you sure you want to delete this message? This action cannot
+                be undone.
+              </p>
+              <div className="flex gap-3 w-full">
+                <button
+                  onClick={() => setDeleteConfirmationId(null)}
+                  className={`flex-1 py-3 rounded-xl font-medium transition-colors ${
+                    isDarkMode
+                      ? "bg-slate-800 hover:bg-slate-700 text-white"
+                      : "bg-gray-100 hover:bg-gray-200 text-slate-700"
+                  }`}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmDelete}
+                  className="flex-1 py-3 rounded-xl font-medium bg-red-500 hover:bg-red-600 text-white transition-colors shadow-lg shadow-red-500/20"
+                >
+                  Delete
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Main Chat Card */}
       <motion.div
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
-        // --- CARD SIZE ---
-        // Desktop: 'md:h-[650px]' ani fixed height petta.
-        // Idi 100% screen lo center lo correct ga "App" laaga kanipistundi.
         className={`flex flex-col w-full h-full md:flex-none md:w-[900px] md:h-[650px] relative md:rounded-[2rem] md:shadow-2xl overflow-hidden border transition-all duration-300 ${
           isDarkMode
             ? "bg-slate-900/60 backdrop-blur-2xl border-white/10"
@@ -421,6 +631,7 @@ export default function ChatComponent({
               : "radial-gradient(rgba(0,0,0,0.03) 1px, transparent 1px)",
             backgroundSize: "24px 24px",
           }}
+          onClick={() => setActiveMenuId(null)}
         >
           {isLoadingHistory ? (
             <div className="flex justify-center py-10">
@@ -441,7 +652,7 @@ export default function ChatComponent({
                   key={idx}
                   initial={{ opacity: 0, y: 10, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  className={`flex ${isMe ? "justify-end" : "justify-start"}`}
+                  className={`flex group relative ${isMe ? "justify-end" : "justify-start"}`}
                 >
                   <div
                     className={`max-w-[75%] md:max-w-[60%] p-4 rounded-[20px] shadow-sm relative ${
@@ -452,6 +663,55 @@ export default function ChatComponent({
                           : "bg-white text-slate-800 border border-gray-100 rounded-bl-[4px]"
                     }`}
                   >
+                    {isMe && !msg.fileUrl && (
+                      <div className="absolute top-2 right-2 z-10">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveMenuId(
+                              activeMenuId === msg._id ? null : msg._id,
+                            );
+                          }}
+                          className={`p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity ${
+                            activeMenuId === msg._id
+                              ? "opacity-100 bg-black/20"
+                              : "hover:bg-black/10"
+                          }`}
+                        >
+                          <MoreVertical size={14} className="text-white/80" />
+                        </button>
+
+                        {activeMenuId === msg._id && (
+                          <motion.div
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className={`absolute right-0 top-6 w-32 rounded-lg shadow-xl overflow-hidden py-1 z-20 ${
+                              isDarkMode
+                                ? "bg-slate-800 border border-slate-700"
+                                : "bg-white border border-gray-100"
+                            }`}
+                          >
+                            <button
+                              onClick={() => handleEditClick(msg)}
+                              className={`w-full text-left px-3 py-2 text-xs flex items-center gap-2 ${
+                                isDarkMode
+                                  ? "hover:bg-white/10 text-white"
+                                  : "hover:bg-gray-50 text-slate-700"
+                              }`}
+                            >
+                              <Edit2 size={12} /> Edit
+                            </button>
+                            <button
+                              onClick={() => handleDeleteTrigger(msg._id)} // 🔥 Uses new Trigger
+                              className="w-full text-left px-3 py-2 text-xs flex items-center gap-2 text-red-500 hover:bg-red-500/10"
+                            >
+                              <Trash2 size={12} /> Delete
+                            </button>
+                          </motion.div>
+                        )}
+                      </div>
+                    )}
+
                     {msg.fileUrl && (
                       <div className="mb-3 rounded-xl overflow-hidden bg-black/20">
                         {msg.messageType === "image" ? (
@@ -482,6 +742,11 @@ export default function ChatComponent({
 
                     <p className="text-[15px] leading-relaxed whitespace-pre-wrap">
                       {msg.text}
+                      {msg.isEdited && (
+                        <span className="text-[10px] opacity-60 ml-1">
+                          (edited)
+                        </span>
+                      )}
                     </p>
 
                     <div
@@ -505,9 +770,8 @@ export default function ChatComponent({
 
         {/* --- INPUT AREA --- */}
         <div className="px-4 pb-3 pt-2 md:p-6 z-20 bg-transparent">
-          {/* File Preview */}
           <AnimatePresence>
-            {selectedFile && (
+            {selectedFile && !previewImage && (
               <motion.div
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -539,6 +803,17 @@ export default function ChatComponent({
             )}
           </AnimatePresence>
 
+          {editingMessageId && (
+            <div
+              className={`mb-2 px-4 py-2 rounded-lg text-xs flex justify-between items-center ${isDarkMode ? "bg-blue-500/20 text-blue-200" : "bg-blue-50 text-blue-600"}`}
+            >
+              <span>Editing message...</span>
+              <button onClick={handleCancelEdit}>
+                <X size={14} />
+              </button>
+            </div>
+          )}
+
           <div
             className={`flex items-center gap-2 p-1.5 rounded-[2rem] shadow-lg border relative transition-all ${
               isDarkMode
@@ -546,13 +821,10 @@ export default function ChatComponent({
                 : "bg-white/90 border-white/60 shadow-blue-500/10"
             }`}
           >
-            {/* File Upload Button */}
             <input
               type="file"
               ref={fileInputRef}
-              onChange={(e) =>
-                e.target.files?.[0] && setSelectedFile(e.target.files[0])
-              }
+              onChange={handleFileSelect}
               className="hidden"
               accept="image/*,video/*,audio/*"
             />
@@ -563,7 +835,6 @@ export default function ChatComponent({
               <Paperclip size={20} />
             </button>
 
-            {/* Text Input */}
             <input
               type="text"
               value={inputText}
@@ -579,7 +850,6 @@ export default function ChatComponent({
               className={`flex-1 bg-transparent border-none outline-none text-[15px] px-2 ${isDarkMode ? "text-white placeholder:text-slate-500" : "text-slate-900 placeholder:text-slate-400"}`}
             />
 
-            {/* Action Button */}
             {inputText.trim() || selectedFile ? (
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -592,6 +862,8 @@ export default function ChatComponent({
               >
                 {uploading ? (
                   <Loader2 size={20} className="animate-spin" />
+                ) : editingMessageId ? (
+                  <Check size={20} className="ml-0.5" />
                 ) : (
                   <Send size={20} className="ml-0.5" />
                 )}

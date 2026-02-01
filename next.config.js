@@ -22,11 +22,26 @@ const nextConfig = {
         protocol: "https",
         hostname: "placehold.co", // డమ్మీ ఇమేజెస్ కోసం (Optional)
       },
+      {
+        protocol: "https",
+        hostname: "loremflickr.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images.pexels.com", // 👈 Pexels domain add cheyandi
+      },
+      {
+        protocol: "https",
+        hostname: "upload.wikimedia.org", // 👈 IDI ADD CHEYANDI
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.pixabay.com", // ✅ PIXABAY ADDED
+      },
     ],
   },
   experimental: {
     optimizeCss: true,
   },
 };
-
-module.exports = nextConfig;
+export default nextConfig;

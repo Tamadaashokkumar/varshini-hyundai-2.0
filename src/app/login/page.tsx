@@ -276,6 +276,7 @@ export default function LoginPage() {
                   alt="Hyundai Creta"
                   width={600}
                   height={400}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-700 ease-in-out"
                   priority
                 />
